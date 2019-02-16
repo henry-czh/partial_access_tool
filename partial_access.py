@@ -31,10 +31,15 @@ def locat(locat,value,level,top):
             be=value+unuse
     elif level==3:
         be=value
-    return be
+    count=0
+    for i in be:
+        if i=='0':
+            count=count+1
+        else: 
+            break
+    return be[count:]
 
 def genbe(size):
-    
     if size=='2':
         base_be='f'
         print 'BE  : 64\'h'+locat(addr[-6:-4],locat(addr[-4:-2],base_be,1,1),1,0)
@@ -55,8 +60,9 @@ def genbe(size):
         print 'BE  : 64\'h'+'ffffffff_ffffffff'
         print 'DATA: 512\'h'+data
 
-def getopts():
+def getopts(data):
     addr=''
+    info=[]
     for byte in addr_init:
         if byte=='0':
             addr=addr+'0000'
@@ -90,7 +96,14 @@ def getopts():
             addr=addr+'1110'
         elif byte=='f':
             addr=addr+'1111'
-    return addr
+    count=2**(int(size)+1)-len(data)
+    while count>0:
+        data='0'+data
+        count=count-1
+    
+    info.append(addr)
+    info.append(data)
+    return info
 
 if __name__=='__main__':
     #get opts
@@ -101,6 +114,8 @@ if __name__=='__main__':
         addr_init=sys.argv[1].split('x')[1]
         size=sys.argv[2].split('x')[1]
         data=sys.argv[3].split('x')[1]
-        addr=getopts()
+        addr=getopts(data)[0]
+        data=getopts(data)[1]
+        #print data
         #main
         genbe(size)
