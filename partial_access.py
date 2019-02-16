@@ -32,11 +32,12 @@ def locat(locat,value,level,top):
     elif level==3:
         be=value
     count=0
-    for i in be:
-        if i=='0':
-            count=count+1
-        else: 
-            break
+    if top==0:
+        for i in be:
+            if i=='0':
+                count=count+1
+            else: 
+                break
     return be[count:]
 
 def genbe(size):
